@@ -1,5 +1,7 @@
-import { getAll } from '../services/storage.js';
+import { getAll, remove } from '../services/storage.js';
 import { TIPOS, TEMAS, NIVELES } from '../data/options.js';
+import { showToast } from '../components/toast.js';
+import { confirmDialog } from '../components/modal.js';
 
 // Convierte un valor a su etiqueta correspondiente buscando en la lista de opciones
 export function getLabel(lista, value) {
@@ -16,7 +18,7 @@ function getDomain(url) {
   }
 }
 
-// Renderiza la vista de listado de recursos
+// Renderiza la vista de listado de recursos y gestiona acciones sobre las tarjetas
 export function renderList(app) {
   const recursos = getAll();
   const sortedRecursos = [...recursos].sort(
@@ -61,7 +63,10 @@ export function renderList(app) {
                   </div>
                   <div class="resource-card-footer">
                     <span class="resource-date">${fecha}</span>
-                    <a href="#/editar/${recurso.id}" class="btn btn-secondary">Editar</a>
+                    <div class="resource-card-actions">
+                      <a href="#/editar/${recurso.id}" class="btn btn-secondary">Editar</a>
+                      <button type="button" class="btn btn-danger" data-action="eliminar" data-id="${recurso.id}">Eliminar</button>
+                    </div>
                   </div>
                 </div>
               `;
@@ -79,4 +84,27 @@ export function renderList(app) {
       ${content}
     </div>
   `;
+
+  const grid = app.querySelector('.resources-grid');
+  if (grid) {
+    grid.addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-action="eliminar"]');
+      if (!btn) return;
+
+      const id = btn.dataset.id;
+      const recurso = recursos.find((item) => item.id === id);
+      const titulo = recurso ? recurso.titulo : '';
+
+      const confirmed = await confirmDialog(`¿Eliminar "${titulo}"? Esta acción no se puede deshacer.`);
+      if (!confirmed) return;
+
+      const success = remove(id);
+      if (success) {
+        showToast('Recurso eliminado');
+        renderList(app);
+      } else {
+        showToast('No se pudo eliminar', 'error');
+      }
+    });
+  }
 }

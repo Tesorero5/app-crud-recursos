@@ -51,6 +51,18 @@ export function update(id, data) {
   return updatedResource;
 }
 
+// Elimina un recurso por su id si existe, guarda los cambios y retorna true, o false si no existe
+export function remove(id) {
+  const resources = getAll();
+  const exists = resources.some((item) => item.id === id);
+  if (!exists) {
+    return false;
+  }
+  const filtered = resources.filter((item) => item.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+  return true;
+}
+
 // Devuelve el total de recursos, cantidad de favoritos y cantidad de temas únicos
 export function getStats() {
   const resources = getAll();

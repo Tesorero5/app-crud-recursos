@@ -210,6 +210,12 @@
   border-top: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
 }
 
+.resource-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .resource-date {
   font-size: 0.875rem;
   opacity: 0.7;
@@ -227,4 +233,51 @@
 .empty-state p {
   font-size: 1.125rem;
   margin: 0;
+}
+
+/* Diálogo modal y botón de peligro */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+.modal {
+  background-color: var(--color-surface, #ffffff);
+  padding: 1.5rem;
+  border-radius: var(--radius-md, 0.5rem);
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-message {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.btn-danger {
+  background-color: var(--color-error);
+  color: var(--color-white, #ffffff);
+  border: 1px solid var(--color-error);
+}
+
+.btn-danger:hover {
+  opacity: 0.9;
 }
