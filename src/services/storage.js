@@ -25,6 +25,32 @@ export function create(data) {
   return newResource;
 }
 
+// Devuelve el recurso con ese id usando find, o null si no existe
+export function getById(id) {
+  const resources = getAll();
+  const resource = resources.find((item) => item.id === id);
+  return resource || null;
+}
+
+// Actualiza un recurso existente combinando sus datos y conservando id y fechaCreacion
+export function update(id, data) {
+  const resources = getAll();
+  const index = resources.findIndex((item) => item.id === id);
+  if (index === -1) {
+    return null;
+  }
+  const recursoActual = resources[index];
+  const updatedResource = {
+    ...recursoActual,
+    ...data,
+    id: recursoActual.id,
+    fechaCreacion: recursoActual.fechaCreacion,
+  };
+  resources[index] = updatedResource;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(resources));
+  return updatedResource;
+}
+
 // Devuelve el total de recursos, cantidad de favoritos y cantidad de temas únicos
 export function getStats() {
   const resources = getAll();
